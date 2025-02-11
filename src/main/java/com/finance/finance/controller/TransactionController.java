@@ -96,12 +96,20 @@ public class TransactionController
     }
 
     @GetMapping("/delete-transaction")
-    public ResponseEntity<?> deleteTransaction(@RequestParam int transactionId)
+    public ResponseEntity<?> deleteTransaction(@RequestParam int transactionId , Principal principal)
     {
+
+        String userName = principal.getName();
         try
         {
             logger.info("Transaction deleted for user: {}", transactionId);
-            return ResponseEntity.ok(transactionsService.deleteTransaction(transactionId));
+
+            if(transactionsService.deleteTransaction(transactionId).equals("Transaction deleted"))
+            {
+                return ResponseEntity.ok(transactionsService.getUserTransactions(userName));
+            }
+
+            return ResponseEntity.ok("No transaction found");
         }
         catch (Exception e)
         {
