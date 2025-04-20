@@ -63,4 +63,10 @@ public class UserService
         return "fail";
 
     }
+
+    public UserDTO getUserNameByEmail(String email)
+    {
+        return userRepository.findUserNameByEmail(email);
+    }
+
 }

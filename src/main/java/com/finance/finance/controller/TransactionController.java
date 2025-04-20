@@ -2,6 +2,7 @@ package com.finance.finance.controller;
 
 import com.finance.finance.dto.CategoryDTO;
 import com.finance.finance.dto.TransactionsDTO;
+import com.finance.finance.dto.UserDTO;
 import com.finance.finance.service.TransactionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -114,6 +115,23 @@ public class TransactionController
         catch (Exception e)
         {
             logger.error("Failed to delete transaction for user {}: {}", transactionId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
+        }
+    }
+
+    @GetMapping("/get-by-description")
+    public ResponseEntity<?> getByDescription(@RequestParam(required = false) String description ,  Principal principal)
+    {
+        String name = principal.getName();
+        try
+        {
+            List<TransactionsDTO> transactions = transactionsService.getByDescription(description,name);
+            logger.info("Transactions found by description: {}", description);
+            return ResponseEntity.ok(transactions);
+        }
+        catch (Exception e)
+        {
+            logger.error("Failed to find transactions by description {}: {}", description, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
         }
     }

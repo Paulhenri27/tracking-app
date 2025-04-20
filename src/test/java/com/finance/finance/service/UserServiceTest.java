@@ -1,6 +1,6 @@
 package com.finance.finance.service;
 
-import com.finance.finance.model.Category;
+import com.finance.finance.dto.UserDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,19 +8,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class CategoryServiceTest
-{
+class UserServiceTest {
+
     @Autowired
-    private CategoryService categoryService;
+    private UserService userService;
 
 
     @Test
-    void addCategory()
+    void getUser()
     {
-        Category category = new Category();
-        category.setName("Saving");
+        UserDTO userDto = userService.getUserNameByEmail("petit@gmail.com");
 
-        System.out.println(categoryService.addCategory(category));
+        System.out.println(userDto.toString());
     }
 
 }

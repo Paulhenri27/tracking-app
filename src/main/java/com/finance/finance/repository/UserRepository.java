@@ -1,5 +1,6 @@
 package com.finance.finance.repository;
 
+import com.finance.finance.dto.UserDTO;
 import com.finance.finance.model.Transactions;
 import com.finance.finance.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,4 +20,9 @@ public interface UserRepository extends JpaRepository<User, Integer>
 
     @Query("SELECT t FROM Transactions t JOIN t.user u WHERE u.email = :email")
     List<Transactions> findTransactionsByUserEmail(@Param("email") String email);
+
+    @Query("SELECT new com.finance.finance.dto.UserDTO(u.firstName, u.lastName) FROM User u WHERE u.email = :email")
+    UserDTO findUserNameByEmail(@Param("email") String email);
+
+
 }

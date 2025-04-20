@@ -2,6 +2,7 @@ package com.finance.finance.service;
 
 import com.finance.finance.dto.CategoryDTO;
 import com.finance.finance.dto.TransactionsDTO;
+import com.finance.finance.dto.UserDTO;
 import com.finance.finance.mapper.Mapper;
 import com.finance.finance.model.Category;
 import com.finance.finance.model.Transactions;
@@ -9,6 +10,7 @@ import com.finance.finance.model.User;
 import com.finance.finance.repository.CategoryRepository;
 import com.finance.finance.repository.TransactionsRepository;
 import com.finance.finance.repository.UserRepository;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,6 +72,7 @@ public class TransactionsService
             return List.of();
         }
         return user.getTransactions().stream()
+                .sorted(Comparator.comparing(Transactions::getDate))
                 .map(Mapper::mapTransactionToDTO)
                 .collect(Collectors.toList());
     }
@@ -77,13 +81,11 @@ public class TransactionsService
 
     public List<TransactionsDTO> getUserTransactionsWithFilters(String username, String categoryName, LocalDateTime startDate, LocalDateTime endDate)
     {
-
         if ((startDate != null && endDate == null) || (startDate == null && endDate != null))
         {
             logger.error("Both startDate and endDate must be provided if one is specified.");
             throw new IllegalArgumentException("Both startDate and endDate must be provided if one is specified.");
         }
-
         User user = userRepository.findUserByEmail(username).orElseThrow(() -> new RuntimeException("User not found"));
         if (user == null)
         {
@@ -126,5 +128,23 @@ public class TransactionsService
             return "Transaction could not be deleted";
         }
         return "Transaction deleted";
+    }
+
+
+    public List<TransactionsDTO> getByDescription(String description , String name)
+    {
+        User user = userRepository.findUserByEmail(name).orElseThrow(() -> new RuntimeException("User not found"));
+
+        Integer userId = user.getId();
+        List<Transactions> transactions = transactionsRepository.findTransactionsByDescriptionAndUserId(description , user);
+        if (transactions.isEmpty())
+        {
+            logger.info("No transactions found by description: {}", description);
+        }
+        else
+        {
+            logger.info("Transactions found by description: {}", description);
+        }
+        return transactions.stream().map(Mapper::mapTransactionToDTO).collect(Collectors.toList());
     }
 }

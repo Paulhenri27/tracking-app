@@ -10,7 +10,21 @@ public class UserDTO
     private String role;
     private List<TransactionsDTO> transactions;
 
+    public UserDTO(String lastName, String firstName, Integer id, String email, String role, List<TransactionsDTO> transactions) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.id = id;
+        this.email = email;
+        this.role = role;
+        this.transactions = transactions;
+    }
 
+    public UserDTO() {}
+
+    public UserDTO(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
     public Integer getId() {
         return id;

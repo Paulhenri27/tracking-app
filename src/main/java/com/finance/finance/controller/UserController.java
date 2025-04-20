@@ -6,9 +6,7 @@ import com.finance.finance.dto.UserRegistrationDTO;
 import com.finance.finance.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -27,4 +25,11 @@ public class UserController {
     {
         return userService.verify(loginDto);
     }
+
+    @PostMapping("/get-user")
+    public UserDTO getUser(@RequestBody UserDTO userDTO)
+    {
+        return userService.getUserNameByEmail(userDTO.getEmail());
+    }
+
 }

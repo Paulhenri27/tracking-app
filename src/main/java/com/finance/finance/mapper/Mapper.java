@@ -13,8 +13,6 @@ import java.util.stream.Collectors;
 public class Mapper
 {
 
-
-
     public static UserDTO mapUserToDTO(User user)
     {
         UserDTO dto = new UserDTO();

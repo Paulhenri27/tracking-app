@@ -12,13 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface TransactionsRepository extends JpaRepository<Transactions, Integer>
 {
 
     List<Transactions> findByUser_Email(String email);
-
-
 
 
     @Query("SELECT t FROM Transactions t WHERE t.user = :user " +
@@ -35,4 +34,11 @@ public interface TransactionsRepository extends JpaRepository<Transactions, Inte
     @Modifying
     @Query("DELETE FROM Transactions t WHERE t.id = :id")
     int deleteTransactionsById(@Param("id") int id);
+
+
+    @Query("SELECT t FROM Transactions t " +
+            "WHERE t.user = :user " +
+            "AND lower(t.description) LIKE lower(concat('%', :description, '%'))")
+    List<Transactions> findTransactionsByDescriptionAndUserId(@Param("description") String description,
+                                                             @Param("user") User user);
 }

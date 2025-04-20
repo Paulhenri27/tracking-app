@@ -1,10 +1,9 @@
 package com.finance.finance.dto;
 
-public class CategoryDTO {
+public class CategoryDTO
+{
     private Integer id;
     private String name;
-
-
 
     public Integer getId() {
         return id;
