@@ -3,11 +3,10 @@ services:
     image: mysql:5.7
     container_name: mysql-container-new
     environment:
-      MYSQL_ROOT_PASSWORD: jRAP00yylnMyHi0
-      MYSQL_DATABASE: finance
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
     healthcheck:
-      # Check if MySQL is ready by running "mysqladmin ping"
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -pjRAP00yylnMyHi0 || exit 1"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p${MYSQL_ROOT_PASSWORD} || exit 1"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -22,9 +21,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/finance?useSSL=false&allowPublicKeyRetrieval=true"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/${DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true"
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: jRAP00yylnMyHi0
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     depends_on:
       mysql:
         condition: service_healthy
