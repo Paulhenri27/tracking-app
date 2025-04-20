@@ -4,6 +4,7 @@ public class CategoryDTO
 {
     private Integer id;
     private String name;
+//    private String description;
 
     public Integer getId() {
         return id;
